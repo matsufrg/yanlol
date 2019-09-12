@@ -22,9 +22,7 @@ export default class Main extends Component {
     axios.get('https://br1.api.riotgames.com/lol/match/v4/matchlists/by-account/mLyOddaGsx_ohjyV0pgkUkxaztB9t4k3BaP6xVuWRx9DePk?api_key=RGAPI-cba63c91-b2b6-4d7e-a8b4-069e1c5a1b8a', {
     headers: {                  
         "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Headers": "Authorization", 
-        "Access-Control-Allow-Methods": "GET, POST, OPTIONS, PUT, PATCH, DELETE" ,
-        "Content-Type": "application/json;charset=UTF-8"                   
+        "Access-Control-Allow-Headers": "Authorization"
     },
 
   });
