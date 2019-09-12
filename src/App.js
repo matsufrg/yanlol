@@ -43,8 +43,6 @@ export default class Main extends Component {
     return champ[0].name;
   }
 
-  listarFragsDoYan() { }
-
   render() {
     return (
       <div>
