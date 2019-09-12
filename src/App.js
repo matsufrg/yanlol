@@ -4,41 +4,60 @@ import champions from 'lol-champions'
 
 export default class Main extends Component {
 
-  constructor(){
+  constructor() {
     super();
     this.state = {
+      fragsDoYan: [],
       yanStats: [],
-      yanMatches: [],
     }
   }
 
-  componentDidMount() {
-    console.log(champions);
-    this.getYanStats();
+  async componentDidMount() {
+
+    var result = await axios.get('https://cors-anywhere.herokuapp.com/https://acs.leagueoflegends.com/v1/stats/player_history/BR1/1026866?begIndex=0&endIndex=20');
+
+    this.setState({ yanStats: result.data });
+
+    console.log(this.state.yanStats);
+
+    let status = this.state.yanStats.games.games
+
+    let fragsDoYan = status.filter((result) => {
+      if (result.participants[0].stats.deaths - result.participants[0].stats.kills >= 5) {
+        return { ...result }
+      }
+    });
+
+    this.setState({ fragsDoYan: fragsDoYan });
+
+    console.log(this.state.yanStats);
   }
 
-  getYanStats() {
+  getChampion(id) {
 
-    axios.get('https://br1.api.riotgames.com/lol/match/v4/matchlists/by-account/mLyOddaGsx_ohjyV0pgkUkxaztB9t4k3BaP6xVuWRx9DePk?api_key=RGAPI-cba63c91-b2b6-4d7e-a8b4-069e1c5a1b8a', {
-    headers: {                  
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Headers": "Authorization"
-    },
+    let champ = champions.filter((c) => {
+      if (parseInt(c.key) === id) {
+        return c.name;
+      }
+    });
+    return champ[0].name;
+  }
 
-  });
-}
+  listarFragsDoYan() { }
 
   render() {
-    return(
+    return (
+      <div>
+        <h1>Frags do Yan:</h1>
         <div>
-          <ul style={{ display: 'flex', flexFlow: 'row wrap'  }}>
-          {champions.map((c) => (
+          {this.state.fragsDoYan.map((value, i) => (
             <>
-              <img src={c.icon} />
-              </>
+              <span>{this.state.fragsDoYan.length !== 0 ? this.getChampion(this.state.fragsDoYan[i].participants[0].championId) : ''} </span>
+              <p>{this.state.fragsDoYan.length !== 0 ? this.state.fragsDoYan[i].participants[0].stats.kills + '/' + this.state.fragsDoYan[i].participants[0].stats.deaths + '/' + this.state.fragsDoYan[i].participants[0].stats.assists : ''}</p>
+            </>
           ))}
-          </ul>
         </div>
+      </div>
     )
   }
 }
