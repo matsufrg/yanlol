@@ -22,7 +22,7 @@ export default class Main extends Component {
 
   async componentDidMount() {
 
-    var result = await axios.get('https://cors-anywhere.herokuapp.com/https://acs.leagueoflegends.com/v1/stats/player_history/BR1/1026866');
+    var result = await axios.get('https://cors-anywhere.herokuapp.com/https://acs.leagueoflegends.com/v1/stats/player_history/BR1/1026866?begIndex=0&endIndex=20');
     var result2 = await axios.get('https://cors-anywhere.herokuapp.com/https://br1.api.riotgames.com/lol/match/v4/matchlists/by-account/NmbD8Iz8nIUZ-PnVWsesyffQNQfmSfPQitJMrYHZwBcH?api_key=RGAPI-ed521f78-5976-4868-a704-b0a9690b8392')
     let status = result.data.games.games
 
@@ -83,7 +83,7 @@ export default class Main extends Component {
               timeStamps={this.getTimeAgo}
               getVictory={this.getVictory}
               getKda={this.getKda}
-              fragsDoYan={this.state.fragsDoYan}
+              fragsDoYan={this.state.fragsDoYan.reverse()}
               getChampion={this.getChampion} />
           </Styled.Container>
         </div>
