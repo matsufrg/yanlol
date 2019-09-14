@@ -4,6 +4,12 @@ export const Card = styled.div`
    width: 31%;
     margin-right: 30px;
 
+
+    @media (max-width: 500px) {
+        width: 100%;
+        margin: 0;
+    }
+
     & p {
         margin: 0;
     }
@@ -55,10 +61,17 @@ export const TextMiddleBold = styled(TextMiddle)`
 export const Icon = styled(Sides)`
     width: 20%;
     padding: 10px;
+    @media (max-width: 500px) {
+        width: 18%;
+    }
 `;
 
 export const Image = styled.img`
     border-radius: 50%;
     margin-left: 10px;
     width: 90px;
+    @media (max-width: 500px) {
+        margin: 0;
+        width: 80px;
+    }
 `;
