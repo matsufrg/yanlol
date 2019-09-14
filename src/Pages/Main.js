@@ -56,7 +56,6 @@ export default class Main extends Component {
   }
 
   getVictory(i) {
-    console.log('teste');
     if (this.state.fragsDoYan[i].participants[0].stats.win) {
       return ['green', 'Vitória'];
     } else {
