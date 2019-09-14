@@ -9,8 +9,6 @@ const Card = ({ ...props }) => (
                 <Styled.Icon>
                     <Styled.Image src={props.getChampion(props.fragsDoYan[i].participants[0].championId)[1]} />
                 </Styled.Icon>
-                {console.log(props.fragsDoYan)}
-                {console.log(props.yanMatches)}
                 <Styled.LeftSide>
                     <Styled.TextMiddleBold bold>{props.fragsDoYan.length !== 0 ? props.getChampion(props.fragsDoYan[i].participants[0].championId)[0] : ''}</Styled.TextMiddleBold>
                     <Styled.TextMiddleKda color={props.getVictory(i)[0]}>{props.getKda(i)}</Styled.TextMiddleKda>

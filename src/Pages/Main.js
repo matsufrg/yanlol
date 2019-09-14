@@ -56,9 +56,9 @@ export default class Main extends Component {
   }
 
   getVictory(i) {
-    if (this.state.yanQuery.win) {
+    console.log('teste');
+    if (this.state.fragsDoYan[i].participants[0].stats.win) {
       return ['green', 'Vitória'];
-
     } else {
       return ['red', 'Derrota']
     }
