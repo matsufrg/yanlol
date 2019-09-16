@@ -23,7 +23,7 @@ export default class Main extends Component {
   async componentDidMount() {
 
     var result = await axios.get('https://cors-anywhere.herokuapp.com/https://acs.leagueoflegends.com/v1/stats/player_history/BR1/1026866?begIndex=0&endIndex=20');
-    var result2 = await axios.get('https://cors-anywhere.herokuapp.com/https://br1.api.riotgames.com/lol/match/v4/matchlists/by-account/NmbD8Iz8nIUZ-PnVWsesyffQNQfmSfPQitJMrYHZwBcH?api_key=RGAPI-ed521f78-5976-4868-a704-b0a9690b8392')
+    var result2 = await axios.get('https://cors-anywhere.herokuapp.com/https://br1.api.riotgames.com/lol/match/v4/matchlists/by-account/NmbD8Iz8nIUZ-PnVWsesyffQNQfmSfPQitJMrYHZwBcH?api_key=RGAPI-6b0e2872-2dde-4e1d-b27b-1b562b4938ea')
     let status = result.data.games.games
 
     let fragsDoYan = status.filter((result) => {
