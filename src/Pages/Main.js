@@ -44,11 +44,16 @@ export default class Main extends Component {
       return ['Neeko', 'https://i.imgur.com/VqWTupp.png'];
     }
 
+    if (id === 246) {
+      return ['Qiyana', 'https://66.media.tumblr.com/7afb5598a6738a8d06c90ec290ba6341/tumblr_psy9ucdMg31v8bzgjo4_250.png'];
+    }
+
     let champ = champions.filter((c) => {
       if (parseInt(c.key) === id) {
         return c.name;
       }
     });
+    console.log(champ);
     return [champ[0].name, champ[0].icon];
   }
 
