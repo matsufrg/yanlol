@@ -17,14 +17,15 @@ export default class Main extends Component {
 
     this.getVictory = this.getVictory.bind(this);
     this.getKda = this.getKda.bind(this);
+    console.log('teste');
     this.getTimeAgo = this.getTimeAgo.bind(this);
   }
 
   async componentDidMount() {
 
     var result = await axios.get('https://cors-anywhere.herokuapp.com/https://acs.leagueoflegends.com/v1/stats/player_history/BR1/1026866?begIndex=0&endIndex=20');
-    var result2 = await axios.get('https://cors-anywhere.herokuapp.com/https://br1.api.riotgames.com/lol/match/v4/matchlists/by-account/NmbD8Iz8nIUZ-PnVWsesyffQNQfmSfPQitJMrYHZwBcH?api_key=RGAPI-9c49d206-0ec7-4c93-9b46-64190ef64769')
-    let status = result.data.games.games
+    var result2 = await axios.get('https://cors-anywhere.herokuapp.com/https://br1.api.riotgames.com/lol/match/v4/matchlists/by-account/NmbD8Iz8nIUZ-PnVWsesyffQNQfmSfPQitJMrYHZwBcH?api_key=RGAPI-cd3000b7-b8cf-48fb-b0b5-f5bd0835dd44')
+    let status = result.data.games.games;
 
     let fragsDoYan = status.filter((result) => {
       if (result.participants[0].stats.deaths - result.participants[0].stats.kills >= 5) {
@@ -39,6 +40,12 @@ export default class Main extends Component {
   }
 
   getChampion(id) {
+
+    console.log(id);
+
+    if (id === 235) {
+      return ['Senna', 'https://66.media.tumblr.com/6fc000f0f6b6a79d97d526706842b557/f167f97ab5d98078-3e/s128x128u_c1/1e47e2ec9a0c0680543c40b083efa9d1f3e337f2.jpg'];
+    }
 
     if (id === 518) {
       return ['Neeko', 'https://i.imgur.com/VqWTupp.png'];
