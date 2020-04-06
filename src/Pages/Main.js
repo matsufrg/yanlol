@@ -17,14 +17,16 @@ export default class Main extends Component {
 
     this.getVictory = this.getVictory.bind(this);
     this.getKda = this.getKda.bind(this);
-    console.log('teste');
     this.getTimeAgo = this.getTimeAgo.bind(this);
   }
 
   async componentDidMount() {
 
-    var result = await axios.get('https://cors-anywhere.herokuapp.com/https://acs.leagueoflegends.com/v1/stats/player_history/BR1/1026866?begIndex=0&endIndex=20');
-    var result2 = await axios.get('https://cors-anywhere.herokuapp.com/https://br1.api.riotgames.com/lol/match/v4/matchlists/by-account/NmbD8Iz8nIUZ-PnVWsesyffQNQfmSfPQitJMrYHZwBcH?api_key=RGAPI-c45586b3-f2b6-4253-8b98-d36436d4fad0')
+    const [result, matches] = await Promise.all([
+      axios.get('https://cors-anywhere.herokuapp.com/https://acs.leagueoflegends.com/v1/stats/player_history/BR1/1026866?begIndex=0&endIndex=20'),
+      axios.get('https://cors-anywhere.herokuapp.com/https://br1.api.riotgames.com/lol/match/v4/matchlists/by-account/NmbD8Iz8nIUZ-PnVWsesyffQNQfmSfPQitJMrYHZwBcH?api_key=RGAPI-c45586b3-f2b6-4253-8b98-d36436d4fad0'),
+    ]);
+
     let status = result.data.games.games;
 
     let fragsDoYan = status.filter((result) => {
@@ -34,14 +36,12 @@ export default class Main extends Component {
       return '';
     });
 
-    this.setState({ fragsDoYan: fragsDoYan, yanQuery: fragsDoYan[0].participants[0].stats, yanMatches: result2.data });
+    this.setState({ fragsDoYan: fragsDoYan, yanQuery: fragsDoYan[0].participants[0].stats, yanMatches: matches.data });
 
     this.getKda(1);
   }
 
   getChampion(id) {
-
-    console.log(id);
 
     if (id === 235) {
       return ['Senna', 'https://66.media.tumblr.com/6fc000f0f6b6a79d97d526706842b557/f167f97ab5d98078-3e/s128x128u_c1/1e47e2ec9a0c0680543c40b083efa9d1f3e337f2.jpg'];
@@ -60,7 +60,6 @@ export default class Main extends Component {
         return c.name;
       }
     });
-    console.log(champ);
     return [champ[0].name, champ[0].icon];
   }
 
