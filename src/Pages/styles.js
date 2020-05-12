@@ -18,7 +18,7 @@ export const Header = styled.div`
 `;
 
 export const Container = styled.div`
-        width: 90%;
+    width: 90%;
     margin: 60px auto;
     display: flex;
     -webkit-flex-flow: row wrap;

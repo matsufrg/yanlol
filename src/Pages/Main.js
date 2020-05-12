@@ -22,23 +22,10 @@ export default class Main extends Component {
 
   async componentDidMount() {
 
-    const [result, matches] = await Promise.all([
-      axios.get('https://cors-anywhere.herokuapp.com/https://acs.leagueoflegends.com/v1/stats/player_history/BR1/1026866?begIndex=0&endIndex=20'),
-      axios.get('https://cors-anywhere.herokuapp.com/https://br1.api.riotgames.com/lol/match/v4/matchlists/by-account/NmbD8Iz8nIUZ-PnVWsesyffQNQfmSfPQitJMrYHZwBcH?api_key=RGAPI-c45586b3-f2b6-4253-8b98-d36436d4fad0'),
-    ]);
+    let r = await axios.get('https://br1.api.riotgames.com/lol/match/v4/matchlists/by-account/NmbD8Iz8nIUZ-PnVWsesyffQNQfmSfPQitJMrYHZwBcH?api_key=RGAPI-c45586b3-f2b6-4253-8b98-d36436d4fad0');
 
-    let status = result.data.games.games;
-
-    let fragsDoYan = status.filter((result) => {
-      if (result.participants[0].stats.deaths - result.participants[0].stats.kills >= 5) {
-        return { ...result }
-      }
-      return '';
-    });
-
-    this.setState({ fragsDoYan: fragsDoYan, yanQuery: fragsDoYan[0].participants[0].stats, yanMatches: matches.data });
-
-    this.getKda(1);
+    console.log(r);
+    
   }
 
   getChampion(id) {
@@ -60,6 +47,7 @@ export default class Main extends Component {
         return c.name;
       }
     });
+    console.log(champ);
     return [champ[0].name, champ[0].icon];
   }
 
