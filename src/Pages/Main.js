@@ -23,7 +23,11 @@ export default class Main extends Component {
     let matches;
 
     if (!localStorage.getItem('match')) {
-      const matchList = await axios.get(`https://br1.api.riotgames.com/lol/match/v4/matchlists/by-account/${this.state.userId}?endIndex=18&beginIndex=0&api_key=RGAPI-93c7a000-ba7e-4aa0-9e79-2887623b68a5`)
+      const matchList = await axios.get(`https://br1.api.riotgames.com/lol/match/v4/matchlists/by-account/${this.state.userId}?endIndex=18&beginIndex=0&api_key=RGAPI-93c7a000-ba7e-4aa0-9e79-2887623b68a5`, {
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+        }
+      });
 
       matches = await this.getMatches(matchList);
 
