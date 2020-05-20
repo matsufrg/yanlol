@@ -70,6 +70,8 @@ export const Image = styled.img`
     border-radius: 50%;
     margin-left: 10px;
     width: 90px;
+    height: 90px;
+    
     @media (max-width: 500px) {
         margin: 0;
         width: 80px;

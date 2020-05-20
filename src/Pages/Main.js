@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import moment from 'moment';
 import Card from '../Components/Card';
 import axios from 'axios';
 import * as Styled from './styles';
+import * as moment from 'moment';
+import 'moment/locale/pt-br';
 import champions from 'lol-champions'
 
 export default class Main extends Component {
@@ -10,22 +11,119 @@ export default class Main extends Component {
   constructor() {
     super();
     this.state = {
-      fragsDoYan: [],
-      yanQuery: [],
-      yanMatches: [],
+      infoMatches: [],
+      userId: "NmbD8Iz8nIUZ-PnVWsesyffQNQfmSfPQitJMrYHZwBcH" // NmbD8Iz8nIUZ-PnVWsesyffQNQfmSfPQitJMrYHZwBcH << yan
     }
-
-    this.getVictory = this.getVictory.bind(this);
-    this.getKda = this.getKda.bind(this);
-    this.getTimeAgo = this.getTimeAgo.bind(this);
   }
+
+  // RGAPI-93c7a000-ba7e-4aa0-9e79-2887623b68a5
 
   async componentDidMount() {
 
-    let r = await axios.get('https://br1.api.riotgames.com/lol/match/v4/matchlists/by-account/NmbD8Iz8nIUZ-PnVWsesyffQNQfmSfPQitJMrYHZwBcH?api_key=RGAPI-c45586b3-f2b6-4253-8b98-d36436d4fad0');
+    let matches;
 
-    console.log(r);
-    
+    if (!localStorage.getItem('match')) {
+      const matchList = await axios.get(`https://br1.api.riotgames.com/lol/match/v4/matchlists/by-account/${this.state.userId}?endIndex=18&beginIndex=0&api_key=RGAPI-93c7a000-ba7e-4aa0-9e79-2887623b68a5`)
+
+      matches = await this.getMatches(matchList);
+
+      localStorage.setItem('match', JSON.stringify(matches));
+    }
+
+    if (!matches) {
+      matches = JSON.parse(localStorage.getItem('match'));
+    }
+
+    let userMatches = this.getOnlyUserIdFrags(matches);
+
+    this.setState({ infoMatches: userMatches });
+  }
+
+  getOnlyUserIdFrags = (arr) => {
+    let userKda = [];
+    let personId;
+    let teamWin;
+    let gameDuration;
+    let gameId;
+
+    arr.map((infoMatches) => {
+      infoMatches.participantIdentities.map((identities) => {
+        if (identities.player.accountId === this.state.userId) {
+          personId = identities.participantId;
+        }
+      });
+
+      teamWin = infoMatches.teams.filter((p) => {
+        return p.win === "Win";
+      });
+
+      gameDuration = infoMatches.gameDuration;
+
+      gameId = infoMatches.gameId;
+
+      infoMatches.participants.map((p) => {
+
+        let isWinning;
+
+        if (teamWin[0].teamId === p.teamId) {
+          isWinning = ['green', 'Vitória'];
+        } else {
+          isWinning = ["red", "Derrota"];
+        }
+
+        if (p.participantId === personId && this.getKda(p.stats)) {
+          userKda.push({ ...p, win: isWinning, kda: this.getKda(p.stats), gameDuration, gameId });
+        }
+      });
+    });
+
+    return userKda;
+  };
+
+  getKda = (stats) => {
+    let kills = stats.kills;
+    let deaths = stats.deaths;
+    let assists = stats.assists;
+
+    // return `${kills}/${deaths}/${assists}`;
+
+    var result = deaths - kills > 5;
+
+    if (result) {
+      return `${kills}/${deaths}/${assists}`;
+    }
+
+    return false;
+  };
+
+  getMatches(matchList) {
+    return new Promise((resolve, reject) => {
+
+      let arr = [];
+
+      matchList.data.matches.map((match, i) => {
+        axios.get(`https://br1.api.riotgames.com/lol/match/v4/matches/${match.gameId}?api_key=RGAPI-93c7a000-ba7e-4aa0-9e79-2887623b68a5`).then((result) => {
+          const { participants, participantIdentities, teams, gameMode, gameType, gameDuration, gameId } = result.data;
+
+          let obj = {
+            participantIdentities,
+            participants,
+            teams,
+            gameMode,
+            gameType,
+            gameDuration,
+            gameId
+          };
+
+          arr.push(obj);
+
+          if (i === matchList.data.matches.length - 1) {
+            resolve(arr);
+          }
+        });
+      });
+
+    });
   }
 
   getChampion(id) {
@@ -42,38 +140,33 @@ export default class Main extends Component {
       return ['Qiyana', 'https://66.media.tumblr.com/7afb5598a6738a8d06c90ec290ba6341/tumblr_psy9ucdMg31v8bzgjo4_250.png'];
     }
 
+    if (id === 350) {
+      return ['Yuumi', 'https://i.pinimg.com/736x/52/78/c3/5278c35994da3f962e3a3a44645cf895.jpg'];
+    }
+
     let champ = champions.filter((c) => {
       if (parseInt(c.key) === id) {
         return c.name;
       }
     });
-    console.log(champ);
+
     return [champ[0].name, champ[0].icon];
   }
 
   getTimeAgo(timeStamps) {
+
     var data = new Date(timeStamps);
     data = data.toLocaleDateString();
     data = data.replace(new RegExp('/', 'g'), '');
-    return moment(data, "DDMMYYYY").startOf('day').fromNow();
-  }
-
-  getVictory(i) {
-    if (this.state.fragsDoYan[i].participants[0].stats.win) {
-      return ['green', 'Vitória'];
-    } else {
-      return ['red', 'Derrota']
-    }
-  }
-
-  getKda(i) {
-    let kda = this.state.fragsDoYan.length !== 0 ? this.state.fragsDoYan[i].participants[0].stats.kills + '/' + this.state.fragsDoYan[i].participants[0].stats.deaths + '/' + this.state.fragsDoYan[i].participants[0].stats.assists : '';
-    return kda;
+    return moment(data, "DDMMYYYY").locale('pt-br').startOf('day').fromNow();
   }
 
   render() {
+
+    const { infoMatches } = this.state;
+
     return (
-      <div>
+      <div>{
         <div>
           <Styled.Header>
             <div>
@@ -82,14 +175,13 @@ export default class Main extends Component {
           </Styled.Header>
           <Styled.Container>
             <Card
-              yanMatches={this.state.yanMatches}
+              infoMatches={infoMatches}
               timeStamps={this.getTimeAgo}
-              getVictory={this.getVictory}
-              getKda={this.getKda}
-              fragsDoYan={this.state.fragsDoYan.reverse()}
-              getChampion={this.getChampion} />
+              getChampion={this.getChampion}
+            />
           </Styled.Container>
         </div>
+      }
       </div>
     )
   }

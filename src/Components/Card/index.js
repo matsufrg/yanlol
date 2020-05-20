@@ -2,25 +2,27 @@ import React from 'react';
 import * as Styled from './styles';
 
 const Card = ({ ...props }) => (
-
-    props.fragsDoYan.map((value, i) => (
-        <Styled.Card >
-            <Styled.Body color={props.getVictory(i)[0]}>
-                <Styled.Icon>
-                    <Styled.Image src={props.getChampion(props.fragsDoYan[i].participants[0].championId)[1]} />
-                </Styled.Icon>
-                <Styled.LeftSide>
-                    <Styled.TextMiddleBold bold>{props.fragsDoYan.length !== 0 ? props.getChampion(props.fragsDoYan[i].participants[0].championId)[0] : ''}</Styled.TextMiddleBold>
-                    <Styled.TextMiddleKda color={props.getVictory(i)[0]}>{props.getKda(i)}</Styled.TextMiddleKda>
-                    <Styled.TextMiddleBold>{props.getVictory(i)[1]}</Styled.TextMiddleBold>
-                </Styled.LeftSide>
-                <Styled.RightSide>
-                    <p>{props.timeStamps(props.yanMatches.matches[i].timestamp)}</p>
-                    <p>{Math.floor((props.fragsDoYan[i].gameDuration)/60)} minutos</p>
-                </Styled.RightSide>
-            </Styled.Body>
-        </Styled.Card>
-    ))
-);
+    props.infoMatches.map((value, i) => {
+        return (
+            <Styled.Card key={value.gameId}>
+                <Styled.Body color={value.win[0]}>
+                    <Styled.Icon>
+                        <Styled.Image src={props.getChampion(value.championId)[1]} />
+                    </Styled.Icon>
+                    <Styled.LeftSide>
+                        <Styled.TextMiddleBold bold>{props.infoMatches.length !== 0 ? props.getChampion(value.championId)[0] : ''}</Styled.TextMiddleBold>
+                        <Styled.TextMiddleKda color={value.win[0]}>{value.kda}</Styled.TextMiddleKda>
+                        <Styled.TextMiddleBold>{value.win[1]}</Styled.TextMiddleBold>
+                    </Styled.LeftSide>
+                    <Styled.RightSide>
+                        <p>{props.timeStamps(1589868039498)}</p>
+                        {/* <p>há 5 minutos</p> */}
+                        <p>{Math.floor((value.gameDuration) / 60)} minutos</p>
+                    </Styled.RightSide>
+                </Styled.Body>
+            </Styled.Card>
+        )
+    })
+)
 
 export default Card;
