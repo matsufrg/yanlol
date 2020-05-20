@@ -25,7 +25,8 @@ export default class Main extends Component {
     const config = {
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
-        "Access-Control-Allow-Origin": "*"
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Request-Headers": "X-PINGOTHER, Content-Type"
       }
     }
 
