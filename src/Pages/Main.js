@@ -30,7 +30,7 @@ export default class Main extends Component {
     }
 
     if (!localStorage.getItem('match')) {
-      const matchList = await axios.get(`https://br1.api.riotgames.com/lol/match/v4/matchlists/by-account/${this.state.userId}?endIndex=18&beginIndex=0&api_key=RGAPI-93c7a000-ba7e-4aa0-9e79-2887623b68a5`, config);
+      const matchList = await axios.get(`https://br1.api.riotgames.com/lol/match/v4/matchlists/by-account/NmbD8Iz8nIUZ-PnVWsesyffQNQfmSfPQitJMrYHZwBcH?endIndex=18&beginIndex=1&api_key=RGAPI-dbe31bf4-3cc7-42b5-9b17-08f4ff07bb3b`, config);
 
       matches = await this.getMatches(matchList);
 
