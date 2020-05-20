@@ -33,8 +33,6 @@ export default class Main extends Component {
     if (!localStorage.getItem('match')) {
       const matchList = await axios.get(`https://yanrequests.herokuapp.com/matchlist/${this.state.userId}`, config);
 
-      console.log(matchList);
-
       matches = await this.getMatches(matchList);
 
       localStorage.setItem('match', JSON.stringify(matches));
@@ -43,6 +41,8 @@ export default class Main extends Component {
     if (!matches) {
       matches = JSON.parse(localStorage.getItem('match'));
     }
+    
+    console.log(matches);
 
     let userMatches = this.getOnlyUserIdFrags(matches);
 
@@ -55,6 +55,8 @@ export default class Main extends Component {
     let teamWin;
     let gameDuration;
     let gameId;
+
+    console.log(arr);
 
     arr.map((infoMatches) => {
       infoMatches.participantIdentities.map((identities) => {
@@ -111,9 +113,12 @@ export default class Main extends Component {
 
       let arr = [];
 
-      matchList.data.matches.map((match, i) => {
+      matchList.data.matchList.map((match, i) => {
+
+        console.log(match);
+        
         axios.get(`https://yanrequests.herokuapp.com/match/${match.gameId}`, config).then((result) => {
-          const { participants, participantIdentities, teams, gameMode, gameType, gameDuration, gameId } = result.data;
+          const { participants, participantIdentities, teams, gameMode, gameType, gameDuration, gameId } = result.data.match;
 
           let obj = {
             participantIdentities,
@@ -127,7 +132,7 @@ export default class Main extends Component {
 
           arr.push(obj);
 
-          if (i === matchList.data.matches.length - 1) {
+          if (i === matchList.data.matchList.length - 1) {
             resolve(arr);
           }
         });
