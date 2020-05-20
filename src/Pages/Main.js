@@ -6,6 +6,13 @@ import * as moment from 'moment';
 import 'moment/locale/pt-br';
 import champions from 'lol-champions'
 
+const config = {
+  headers: {
+    "Content-Type": "application/x-www-form-urlencoded",
+    "Access-Control-Allow-Origin": "*"
+  }
+};
+
 export default class Main extends Component {
 
   constructor() {
@@ -16,22 +23,17 @@ export default class Main extends Component {
     }
   }
 
-  // RGAPI-93c7a000-ba7e-4aa0-9e79-2887623b68a5
+  // RGAPI-dbe31bf4-3cc7-42b5-9b17-08f4ff07bb3b
+
 
   async componentDidMount() {
 
     let matches;
 
-    const config = {
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Request-Headers": "X-PINGOTHER, Content-Type"
-      }
-    }
-
     if (!localStorage.getItem('match')) {
-      const matchList = await axios.get(`https://br1.api.riotgames.com/lol/match/v4/matchlists/by-account/NmbD8Iz8nIUZ-PnVWsesyffQNQfmSfPQitJMrYHZwBcH?endIndex=18&beginIndex=1&api_key=RGAPI-dbe31bf4-3cc7-42b5-9b17-08f4ff07bb3b`, config);
+      const matchList = await axios.get(`https://yanrequests.herokuapp.com/matchlist/${this.state.userId}`, config);
+
+      console.log(matchList);
 
       matches = await this.getMatches(matchList);
 
@@ -110,7 +112,7 @@ export default class Main extends Component {
       let arr = [];
 
       matchList.data.matches.map((match, i) => {
-        axios.get(`https://cors-anywhere.herokuapp.com/https://br1.api.riotgames.com/lol/match/v4/matches/${match.gameId}?api_key=RGAPI-93c7a000-ba7e-4aa0-9e79-2887623b68a5`).then((result) => {
+        axios.get(`https://yanrequests.herokuapp.com/match/${match.gameId}`, config).then((result) => {
           const { participants, participantIdentities, teams, gameMode, gameType, gameDuration, gameId } = result.data;
 
           let obj = {
