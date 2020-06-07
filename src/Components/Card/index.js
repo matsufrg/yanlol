@@ -3,6 +3,7 @@ import * as Styled from './styles';
 
 const Card = ({ ...props }) => (
     props.infoMatches.map((value, i) => {
+
         return (
             <Styled.Card key={value.gameId}>
                 <Styled.Body color={value.win[0]}>
@@ -15,7 +16,7 @@ const Card = ({ ...props }) => (
                         <Styled.TextMiddleBold>{value.win[1]}</Styled.TextMiddleBold>
                     </Styled.LeftSide>
                     <Styled.RightSide>
-                        <p>{props.timeStamps(1589868039498)}</p>
+                        <p>{props.timeStamps(value.timestamp)}</p>
                         {/* <p>há 5 minutos</p> */}
                         <p>{Math.floor((value.gameDuration) / 60)} minutos</p>
                     </Styled.RightSide>
